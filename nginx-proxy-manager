@@ -1,0 +1,32 @@
+version: '3.3'
+services:
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:php8.1
+    ports:
+      - 80:80
+    restart: always
+    volumes:
+      - /mnt/wordpress:/var/www/html
+      - /mnt/wordpress/data/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DEBUG: 1
+  db:
+    image: mysql:8.0
+    volumes:
+      - /mnt/wordpress/mysql:/var/lib/mysql
+    restart: always
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+volumes:
+  db_data: {}
